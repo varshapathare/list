@@ -1,0 +1,130 @@
+import java.util.*;
+
+class Product
+{
+	String productname;  
+    float quantity;  
+    float price;  
+    public Product(String productname,float quantity,float price)
+    {  
+        this.productname=productname;  
+        this.quantity=quantity;  
+        this.price=price;  
+    }
+}
+
+class Grocery_List
+{
+	int choice, index=0;
+	float quantity, price, budget;
+	String product;
+	Scanner s = new Scanner(System.in);;
+
+	Product p[] = new Product[10];
+
+	Grocery_List()
+	{
+		System.out.print("Enter budget : ");
+		while(true)
+		{
+			try
+			{
+				budget = s.nextFloat();
+				break;
+			}
+			catch(java.util.InputMismatchException e)
+			{
+				System.out.print("Input must be Integer");
+				continue;
+			}
+		}
+	}
+
+	void disp_choice()
+	{
+		while(true)
+		{
+			System.out.println("\n*** Enter your choice ***");
+			System.out.println("1. Add An Item \n2. Exit");
+
+			choice = s.nextInt();
+
+			if( choice == 1)
+			{
+				add_product();
+				continue;
+			}
+			else if( choice == 2)
+			{
+				System.out.print("  Name\t\tQuantity\tPrice");
+				disp_product();
+				break;
+			}
+			else
+			{
+				System.out.println("Enter Valid Choice");
+			}
+		}
+	}
+
+	void add_product()
+	{
+		System.out.print("\nEnter Product : ");
+		product=s.next();
+		System.out.print("\nEnter Quantity : ");
+		quantity = s.nextFloat();
+		System.out.print("\nEnter Price : ");
+		price = s.nextFloat();
+
+		boolean x = true;
+
+		if(price>budget)
+		{
+			System.out.print("Not enough budget!!!");
+			for(int i=0; i<index; i++)
+			{
+				float prd = p[i].price/p[i].quantity;
+				if(prd < budget)
+				{
+					System.out.print("\nYou can buy " + p[i].productname + " which is for " + prd +" per item.");
+				}
+			}
+		}
+		else
+		{
+			for(int i=0; i<index; i++)
+			{
+				if(p[i].productname.equals(product))
+				{
+					p[i].quantity+=quantity;
+					p[i].price+=price;
+					x = false;
+					break;
+				}
+			}
+			if(x)
+			{
+				p[index] = new Product(product, quantity, price);
+				index++;
+			}
+			System.out.print("Remaining Budget : " + (budget-=price));
+		}
+	}
+
+	void disp_product()
+	{
+		for(int i=0; i<index; i++)
+		{
+			System.out.println("\n"+(i+1)+" " + p[i].productname + "\t\t" + p[i].quantity + "\t\t" + p[i].price);
+		}
+	}
+}
+
+class Grocery
+{
+	public static void main(String[] args)
+	{
+		Grocery_List gl = new Grocery_List();
+		gl.disp_choice();
+	}
+}
